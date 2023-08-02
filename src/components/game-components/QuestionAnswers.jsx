@@ -1,8 +1,10 @@
 import React from "react";
 import { useGlobalContext } from "../../context";
+import Modal from "../Modal";
 
 const QuestionAnswers = () => {
-  const { questions, index, correct, checkAnswer } = useGlobalContext();
+  const { questions, index, correct, checkAnswer, isModalOpen, closeModal } =
+    useGlobalContext();
   console.log(questions, index, correct);
   const { question, incorrect_answers, correct_answer } = questions[index];
   console.log(question);
@@ -17,18 +19,27 @@ const QuestionAnswers = () => {
   // }
 
   return (
-    <div className="flex flex-col justify-center gap-y-3 align-middle w-full text-center">
-      {/* <h2 dangerouslySetInnerHTML={{ __html: question }} /> */}
-      <h2 className="w-full text-2xl mb-3 p-4 bg-blue-950 rounded-full"> {question} </h2>
-      <div className="w-full flex flex-wrap justify-center align-middle gap-2 p-2 mb-3">
-        {answers.map((answer, index) => (
-          <button className="w-[45%] p-2 cursor-pointer bg-blue-950 rounded-full"
-          key={index} onClick={() => checkAnswer(correct_answer === answer)}>
-            {answer}
-          </button>
-        ))}
+    <>
+      {isModalOpen && <Modal />}
+      <div className="flex flex-col justify-center gap-y-3 align-middle w-full text-center">
+        {/* <h2 dangerouslySetInnerHTML={{ __html: question }} /> */}
+        <h2 className="w-full text-2xl mb-3 p-4 bg-blue-950 rounded-full">
+          {" "}
+          {question}{" "}
+        </h2>
+        <div className="w-full flex flex-wrap justify-center align-middle gap-2 p-2 mb-3">
+          {answers.map((answer, index) => (
+            <button
+              className="w-[45%] p-2 cursor-pointer bg-blue-950 rounded-full"
+              key={index}
+              onClick={() => checkAnswer(correct_answer === answer)}
+            >
+              {answer}
+            </button>
+          ))}
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

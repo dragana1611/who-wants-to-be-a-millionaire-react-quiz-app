@@ -1,6 +1,7 @@
 import React, { useState, useContext, useEffect } from "react";
-// import PropTypes from "prop-types";
+import PropTypes from "prop-types";
 import { quizData } from "./data";
+import Modal from "./components/Modal";
 
 const AppContext = React.createContext();
 
@@ -10,6 +11,7 @@ const AppProvider = ({ children }) => {
   const [correct, setCorrect] = useState(0);
   const [error, setError] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedAnswer, setSelectedAnswer] = useState(null);
 
   const questionsData = quizData.results;
   console.log(quizData);
@@ -46,7 +48,7 @@ const AppProvider = ({ children }) => {
     setIndex((oldIndex) => {
       const index = oldIndex + 1;
       if (index > questions.length - 1) {
-        //openModal();
+        openModal();
         return 0;
       } else {
         return index;
@@ -54,11 +56,15 @@ const AppProvider = ({ children }) => {
     });
   };
 
-  const checkAnswer = (value) => { //valu -> true / false
+  const checkAnswer = (value) => {
+    //value -> true / false
     if (value) {
       setCorrect((oldState) => oldState + 1);
+      nextQuestion();
+    } else {
+      console.log("you loose");
+      <Modal />;
     }
-    nextQuestion();
   };
 
   const openModal = () => {
@@ -66,9 +72,11 @@ const AppProvider = ({ children }) => {
   };
 
   const closeModal = () => {
-    setCorrect(0);
     setIsModalOpen(false);
+    
   };
+
+  const handleAnswerClick = () => {};
 
   // useEffect(() => {
   //   const url =
@@ -86,8 +94,8 @@ const AppProvider = ({ children }) => {
         isModalOpen,
         nextQuestion,
         checkAnswer,
-        openModal,
         closeModal,
+        handleAnswerClick,
       }}
     >
       {children}
@@ -95,9 +103,9 @@ const AppProvider = ({ children }) => {
   );
 };
 
-// AppProvider.propTypes = {
-//   children: PropTypes.string.isRequired,
-// };
+AppProvider.propTypes = {
+  children: PropTypes.string.isRequired,
+};
 
 export const useGlobalContext = () => {
   return useContext(AppContext);
